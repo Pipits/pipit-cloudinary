@@ -2,8 +2,21 @@
 class PipitTemplateFilter_cloudinary extends PerchTemplateFilter {
     
     public function filterBeforeProcessing($value, $valueIsMarkup = false) {
-        if (!defined('CLOUDINARY_CLOUDNAME')) return $value;
-        if (PERCH_PRODUCTION_MODE == PERCH_DEVELOPMENT) return $value;
+        if (!defined('CLOUDINARY_CLOUDNAME')) {
+            PerchUtil::debug('Cloudinary Name is not set in config', 'notice');
+            return $value;
+        }
+
+        $allow_dev = false;
+        if(defined('PIPIT_CLOUDINARY_DEV')) $allow_dev = PIPIT_CLOUDINARY_DEV;
+
+        if(!$allow_dev) {
+            if (PERCH_PRODUCTION_MODE == PERCH_DEVELOPMENT || PERCH_PRODUCTION_MODE == PERCH_STAGING) {
+                return $value;
+            }
+        }
+
+
 
         $pre = 'https://res.cloudinary.com/'. CLOUDINARY_CLOUDNAME .'/image/fetch/';
         $opts = $domain = '';
@@ -23,6 +36,8 @@ class PipitTemplateFilter_cloudinary extends PerchTemplateFilter {
         $value = $pre . $opts . urlencode($domain . $value);
         return $value;
     }
+
+    
 
 
 
