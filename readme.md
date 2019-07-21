@@ -17,7 +17,23 @@ include('filters/PipitTemplateFilter_cloudinary.class.php');
 
 ## Configuration
 
+### Cloudinary
+
+- Log into your account and go to **Settings > Security**
+- Under **Restricted image types**, make sure "Fetched URL" is unchecked
+- Under **Allowed fetch domains** list the domain(s) you want to fetch images from
+
+
 ### Perch
+
+#### Enable template filters
+
+You also need to enable template filters in your config file `perch/config/config.php`:
+
+```php
+define('PERCH_TEMPLATE_FILTERS', true);
+```
+
 
 #### Site URL
 
@@ -30,6 +46,7 @@ define('SITE_URL', 'https://example.com');
 If you don't define `SITE_URL`, the URL from Perch Settings will be used as a fallback.
 
 
+
 #### Cloudinary cloud name
 
 In your config file `perch/config/config.php` add your Cloudinary cloud name:
@@ -38,18 +55,14 @@ In your config file `perch/config/config.php` add your Cloudinary cloud name:
 define('CLOUDINARY_CLOUDNAME', 'your-cloud-name');
 ```
 
-#### Enable template filters
-
-You also need to enable template filters in your config:
-
-```php
-define('PERCH_TEMPLATE_FILTERS', true);
-```
-
 
 #### Development / Staging environments
 
-By default the filter is not enable on development or staging environments. That is when you set `PERCH_PRODUCTION_MODE` to `PERCH_DEVELOPMENT` or `PERCH_STAGING`.
+By default, the filter does not rewrite your image URLs if you set your Perch production environment to development or staging:
+ 
+```php
+define('PERCH_PRODUCTION_MODE', PERCH_DEVELOPMENT);
+```
 
 You have the option to enable it:
 
@@ -57,23 +70,9 @@ You have the option to enable it:
 define('PIPIT_CLOUDINARY_DEV', true);
 ```
 
+Note that Cloudinary requires a publicly accessible URL to fetch the image from. So if you enable it on a local development environment for example, it won't work.
 
 
-### Cloudinary
-
-- Log into your account and go to **Settings > Security**
-- Under **Restricted image types**, make sure "Fetched URL" is unchecked
-- Under **Allowed fetch domains** list the domain(s) you want to fetch images from
-
-
-## Environments
-The filter by default does not rewrite your image URLs if you set your Perch production environment to development:
-
-```php
-define('PERCH_PRODUCTION_MODE', PERCH_DEVELOPMENT);
-```
-
-This is because Cloudinary requires publicly accessible URL to fetch the images from.
 
 
 
@@ -94,7 +93,7 @@ To add image manipulation and compression options use the `opts` attribute:
 
 ### External links [DEPRECATED]
 
-**This option is available on v1.0. Newer versions handles this automatically.**
+**⚠️This option is available on v1.0. Newer versions handles this automatically.**
 
 You can also use it on external links (in a regular text field for example) by adding the `external` attribute.
 
