@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * v1.2
+ * https://github.com/Pipits/pipit-cloudinary
+ */
+
 class PipitTemplateFilter_cloudinary extends PerchTemplateFilter {
     
     public function filterBeforeProcessing($value, $valueIsMarkup = false) {
@@ -19,18 +25,30 @@ class PipitTemplateFilter_cloudinary extends PerchTemplateFilter {
 
 
         $pre = 'https://res.cloudinary.com/'. CLOUDINARY_CLOUDNAME .'/image/fetch/';
+        $pre_upload = 'https://res.cloudinary.com/'. CLOUDINARY_CLOUDNAME .'/image/upload/';
         $opts = $domain = '';
 
-        // Cloudinary image manipulation options e.g. /image/fetch/{opts}/{file_url}
+
+        // Cloudinary image manipulation options 
+        // fetch URLs e.g. /image/fetch/{opts}/{file_url}
+        // upload URLs e.g. /image/upload/{opts}/...
         if ($this->Tag->opts) {
             $opts = $this->Tag->opts .'/';
         }
 
+
+        // is it an upload URL?
+        // check if $value starts with $pre_upload
+        if(substr($value, 0, strlen($pre_upload)) == $pre_upload) {
+            PerchUtil::mark('here');
+            return str_replace($pre_upload, $pre_upload.$opts, $value); 
+        }
         
+
         // if URL has no domain, include site's domain
         if (!$this->_is_full_link($value)) {
             $domain = $this->_get_domain();
-        } 
+        }
         
         
         $value = $pre . $opts . urlencode($domain . $value);
