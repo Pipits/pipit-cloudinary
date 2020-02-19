@@ -1,7 +1,7 @@
 <?php
 
 /**
- * v1.2
+ * v1.3-beta
  * https://github.com/Pipits/pipit-cloudinary
  */
 
@@ -33,14 +33,14 @@ class PipitTemplateFilter_cloudinary extends PerchTemplateFilter {
         // fetch URLs e.g. /image/fetch/{opts}/{file_url}
         // upload URLs e.g. /image/upload/{opts}/...
         if ($this->Tag->opts) {
-            $opts = $this->Tag->opts .'/';
+            $opts = $this->_replace_vars($this->Tag->opts, $this->content);
+            $opts .= '/';
         }
 
 
         // is it an upload URL?
         // check if $value starts with $pre_upload
         if(substr($value, 0, strlen($pre_upload)) == $pre_upload) {
-            PerchUtil::mark('here');
             return str_replace($pre_upload, $pre_upload.$opts, $value); 
         }
         
@@ -94,6 +94,27 @@ class PipitTemplateFilter_cloudinary extends PerchTemplateFilter {
         }
 
         return false;
+    }
+
+
+
+    /**
+     * @param string $opts
+     * @param array $vars
+     * @return string
+     */
+    private function _replace_vars($opts, $vars) {
+        return preg_replace_callback('/{([A-Za-z0-9_\-]+)}/', function($matches) use($vars) {
+            if (isset($vars[$matches[1]])) {
+
+                if(!is_array( $vars[$matches[1]] )) {
+                    return $vars[$matches[1]];
+                } elseif(isset( $vars[$matches[1]]['_default'] )) {
+                    return $vars[$matches[1]]['_default'];
+                }
+
+            }
+        }, $opts);
     }
 }
 
