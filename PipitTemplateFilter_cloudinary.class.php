@@ -1,7 +1,7 @@
 <?php
 
 /**
- * v1.3
+ * v1.2
  * https://github.com/Pipits/pipit-cloudinary
  */
 
