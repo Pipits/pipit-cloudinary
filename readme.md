@@ -137,6 +137,12 @@ Using `c_fill` fills the image in a given dimensions similar to CSS's `object-fi
 On the other hand `c_fit` is like CSS's `object-fit: contain` and `background-size: contain` as it resizes the image to take up as much space as possible in a given dimension while maintaining the aspect ratio and keeping the whole image visible. Example usage:  `w_800,h_600,c_fit`.
 
 
+
+## Upload URLs
+
+While the filter was with Cloudinary's fetch URLs in mind, there are cases where it is benefitial to programatically upload images directly to Cloudinary and only store the image URL in a regular text field in Perch. The template filter can handle these URLs as long as it uses the same Cloudinary cloud name as the one you've set in your config file.
+
+
 ## Helpful References:
 
 - [Image Transformation](https://cloudinary.com/documentation/image_transformations)
