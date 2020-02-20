@@ -1,7 +1,7 @@
 <?php
 
 /**
- * v1.3-beta
+ * v1.3
  * https://github.com/Pipits/pipit-cloudinary
  */
 
@@ -104,7 +104,7 @@ class PipitTemplateFilter_cloudinary extends PerchTemplateFilter {
      * @return string
      */
     private function _replace_vars($opts, $vars) {
-        return preg_replace_callback('/{([A-Za-z0-9_\-]+)}/', function($matches) use($vars) {
+        $out =  preg_replace_callback('/{([A-Za-z0-9_\-]+)}/', function($matches) use($vars) {
             if (isset($vars[$matches[1]])) {
 
                 if(!is_array( $vars[$matches[1]] )) {
@@ -115,6 +115,13 @@ class PipitTemplateFilter_cloudinary extends PerchTemplateFilter {
 
             }
         }, $opts);
+
+
+        // remove rouge commas
+        $out = trim($out, ',');
+        $out = preg_replace_callback('/[,]{2,}/', function($matches) { return ',';}, $out);
+        
+        return $out;
     }
 }
 
