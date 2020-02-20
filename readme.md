@@ -90,6 +90,16 @@ To add image manipulation and compression options use the `opts` attribute:
 <perch:content id="image" type="image" filter="cloudinary" opts="w_800,h_600,f_auto">
 ```
 
+### Dynamic variables
+
+You can also use dynamic variables inside the `opts` attribute. These are the variables you have access to inside the template:
+
+```html
+<perch:content id="width" type="select" label="Image Width" options="200|w_200,400|w_400,600|w_600" suppress>
+<perch:content id="height" type="select" label="Image Height" options="200|h_200,400|h_400,600|h_600" suppress>
+<perch:content id="image" type="image" label="Image" filter="cloudinary" opts="f_auto,{width},{height}">
+```
+
 
 ### External links [DEPRECATED]
 
